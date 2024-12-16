@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      gap: 30px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Card Styling */
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      background-color: #fff;
+      padding: 30px;
+      text-align: center;
+    }
+
+    /* Age Card */
+    .age-card {
+      width: 300px;
+      background: #f8f6f4;
+      color: #444;
+    }
+
+    .age-card h2 {
+      margin: 0 0 20px;
+      font-size: 22px;
+    }
+
+    .age-card label {
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .age-card input {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 25px;
+      background-color: #ececec;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .age-card .input-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .age-card .input-group input {
+      width: 30%;
+      flex: 1;
+    }
+
+    .age-card button {
+      background-color: #000;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .age-card small {
+      display: block;
+      margin-top: 15px;
+      color: #888;
+      font-size: 12px;
+    }
+
+    /* Event Card for Results */
+    .event-card {
+      width: 300px;
+      height: 280px;
+      background: #e5e5e5;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #aaa;
+      font-size: 16px;
+      border-radius: 20px;
+    }
+
+    .result-text {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Age Calculator Card -->
+    <div class="card age-card">
+      <h2>Age Calculator</h2>
+
+      <label for="date-inputs">Enter your birth date:</label>
+      <div class="input-group" id="date-inputs">
+        <input type="number" placeholder="Year" min="1900" max="2100" id="year-input">
+        <input type="number" placeholder="Month" min="1" max="12" id="month-input">
+        <input type="number" placeholder="Day" min="1" max="31" id="day-input">
+      </div>
+
+      <label for="hour-input">Hour of birth (optional):</label>
+      <input type="number" placeholder="Hour (0-23)" min="0" max="23" id="hour-input">
+
+      <button onclick="calculateAge()">Calculate</button>
+
+      <small>This calculator estimates your age based on the given inputs. The hour input is optional.</small>
+    </div>
+
+    <!-- Result Card -->
+    <div class="card event-card">
+      <div class="result-text">
+        <p>Result will appear here</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateAge() {
+      const year = document.getElementById("year-input").value;
+      const month = document.getElementById("month-input").value;
+      const day = document.getElementById("day-input").value;
+      const hour = document.getElementById("hour-input").value;
+
+      if (!year || !month || !day) {
+        alert("Please enter a valid year, month, and day.");
+        return;
+      }
+
+      const currentDate = new Date();
+      const birthDate = new Date(year, month - 1, day, hour || 0); // Default to 0 if hour is not provided
+
+      let ageYears = currentDate.getFullYear() - birthDate.getFullYear();
+      let ageMonths = currentDate.getMonth() - birthDate.getMonth();
+      let ageDays = currentDate.getDate() - birthDate.getDate();
+      let ageHours = currentDate.getHours() - birthDate.getHours();
+      let ageMinutes = currentDate.getMinutes() - birthDate.getMinutes();
+
+      if (ageMinutes < 0) {
+        ageHours--;
+        ageMinutes += 60; 
+      }
+
+      if (ageHours < 0) {
+        ageDays--;
+        ageHours += 24; 
+      }
+
+      if (ageDays < 0) {
+        ageMonths--;
+        ageDays += new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate(); 
+      }
+
+      if (ageMonths < 0) {
+        ageYears--;
+        ageMonths += 12; 
+      }
+
+      
+      const resultText = `${ageYears} years, ${ageMonths} months, ${ageDays} days, ${ageHours} hours, and ${ageMinutes} minutes.`;
+
+      const resultCard = document.querySelector(".event-card .result-text");
+      resultCard.innerHTML = `<h2>Result</h2><p>${resultText}</p>`;
+    }
+  </script>
+</body>
+</html>
